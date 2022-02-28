@@ -1,2 +1,5 @@
 # anime-cli
-Cli for anime content 
+
+- cli for anime content
+
+- inspired from https://github.com/pystardust/ani-cli
