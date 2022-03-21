@@ -1,8 +1,7 @@
-use ani_cli::{get_episode_link, get_episodes, search_anime};
+use ani_cli::{get_episode_link, get_episodes, get_video_link, search_anime};
 use anyhow::Result;
 use clap::Parser;
 use requestty;
-mod types;
 #[derive(Parser)]
 struct Cli {
     /// The pattern to look for
@@ -19,7 +18,6 @@ fn main() -> Result<()> {
     let select_anime_question = requestty::Question::input("select_anime")
         .message("Choose an option from the above list :D or press q to quit")
         .validate(|ans, _| {
-
             if ans == "q" {
                 return Ok(());
             }
@@ -77,10 +75,13 @@ fn main() -> Result<()> {
                         return Ok(());
                     }
 
-                    let episode =
+                    let episode_link =
                         get_episode_link(&anime, chosen_episode.as_string().unwrap().to_string())?;
 
-                    println!("episode link:{}", episode);
+
+                    let video_link = get_video_link(&episode_link)?;
+                    println!("video link:{}", video_link);
+
                 }
                 _ => {
                     println!("Invalid option");
