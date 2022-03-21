@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use std::iter;
 
 #[derive(Clone)]
@@ -12,8 +14,8 @@ impl AnimeCollection {
         self.0.push(elem);
     }
 
-    pub fn get_elem(&self, index: usize) -> &Anime {
-        &self.0[index]
+    pub fn get_elem(&self, index: usize) -> Anime {
+        self.0[index].clone()
     }
 
     pub fn print_ele(&self) {
@@ -24,13 +26,6 @@ impl AnimeCollection {
             i += 1;
         }
     }
-}
-
-#[derive(Clone, Debug)]
-pub struct Anime {
-    pub title: String,
-    pub url: String,
-    pub episodes: Vec<u32>,
 }
 
 impl iter::Iterator for AnimeCollection {
@@ -50,4 +45,11 @@ impl iter::FromIterator<Anime> for AnimeCollection {
 
         c
     }
+}
+
+#[derive(Clone, Debug, Default)]
+pub struct Anime {
+    pub title: String,
+    pub url: String,
+    pub episodes: Vec<u32>,
 }
