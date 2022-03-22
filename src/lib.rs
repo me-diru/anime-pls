@@ -1,4 +1,7 @@
 use anyhow::Result;
+use openssl::aes::{AesKey, aes_ige};
+use openssl::symm::Mode;
+
 use select::document::Document;
 use select::predicate::{Attr, Class, Predicate};
 pub mod types;
@@ -82,12 +85,12 @@ pub fn get_video_link(episode_url: &String) -> Result<String> {
 pub fn decrypt_link(video_link: &String) -> Result<String> {
     let mut id = video_link.split("=").nth(1).unwrap().to_string();
     if id.len() < 8 {
-     let padding = "10160310	0304	"; // hacky way to pad the id
+    let padding = "10160310	0304	"; // hacky way to pad the id
 
-     let mut iter = padding.chars();
-     iter.by_ref().nth(id.len()-1);
-     let slice = iter.as_str();
-     id = format!("{}{}", slice, id);  
+    let mut iter = padding.chars();
+    iter.by_ref().nth(8-(id.len()%16));
+    let slice = iter.as_str();
+    id = format!("{}{}", slice, id);  
     }else {
         let last_char = id.chars().last().unwrap();
         let mut digit_char = last_char.to_digit(10).unwrap();
@@ -95,6 +98,26 @@ pub fn decrypt_link(video_link: &String) -> Result<String> {
         let octal_char = format!("{:o}", digit_char);
         id = id.replace(last_char, &octal_char);
     }
+    let padding_2 = "10160310	0304	"; // hacky way to pad the id
+
+    let final_id = format!("{}{}", id, padding_2);
+
+
+    let key = AesKey::new_encrypt(UTIL_VARS.secret_key.as_bytes()).unwrap();
+    // let iv_bytes = UTIL_VARS.iv.as_bytes();
+    let mut temp_iv = UTIL_VARS.iv.clone().to_string();
+
+    unsafe {
+        let mut iv = temp_iv.as_bytes_mut();
+        let mut output = [0u8; 16];
+        aes_ige(final_id.as_bytes(), &mut output, &key,  &mut iv, Mode::Encrypt);
+        let output_string = String::from_utf8(output.to_vec()).unwrap();
+
+        // reqwest::
+
+    }
+    
+    
 
     Ok(id)
 }
