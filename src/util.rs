@@ -8,6 +8,7 @@ pub struct DependantVariables {
     pub secret_key: &'static str,
     pub iv: &'static str,
     pub video_host: &'static str,
+    pub embed_video_tag: &'static str,
 }
 
 pub static UTIL_VARS: &DependantVariables = &DependantVariables {
@@ -20,4 +21,5 @@ pub static UTIL_VARS: &DependantVariables = &DependantVariables {
     secret_key: "3235373136353338353232393338333936313634363632323738383333323838",
     iv: "31323835363732393835323338333933",
     video_host: "https://gogoplay4.com/encrypt-ajax.php",
+    embed_video_tag: "vidcdn",
 };

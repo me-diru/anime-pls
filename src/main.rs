@@ -2,6 +2,7 @@ use ani_cli::{get_episode_link, get_episodes, get_video_link, search_anime};
 use anyhow::Result;
 use clap::Parser;
 use requestty;
+use webbrowser;
 #[derive(Parser)]
 struct Cli {
     /// The pattern to look for
@@ -78,10 +79,31 @@ fn main() -> Result<()> {
                     let episode_link =
                         get_episode_link(&anime, chosen_episode.as_string().unwrap().to_string())?;
 
-
                     let video_link = get_video_link(&episode_link)?;
                     println!("video link:{}", video_link);
+                    
+                    let stream_option_question = requestty::Question::select("stream_option")
+                        .message("Do you want to stream on browser or locally on mpv?").choices(vec![
+                            "Play on browser without ads ",
+                            "Play locally using mpv",
+                        ]).build();
+                    let stream_option = requestty::prompt_one(stream_option_question)?;
 
+
+                    match stream_option.try_into_list_item().unwrap().text.as_str() {
+                        "Play on browser without ads " => {
+                            println!("Opening {}", video_link);
+                    
+                            webbrowser::open(video_link.as_str())?;
+                        }
+                        "Play locally using mpv" => {
+                            println!("Not implemented yet");
+                        }
+                        _ => {
+                            println!("Exiting");
+                            return Ok(());
+                        }
+                    }
                 }
                 _ => {
                     println!("Invalid option");
