@@ -1,9 +1,15 @@
 [package]
-name = "ani_cli"
-version = "0.1.0"
+name = "anime-pls"
+version = "0.1.1"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+authors = ["rohit <me@diru.tech>"]
+license = "MIT OR Apache-2.0"
+description = "A tool to search and play anime"
+readme = "README.md"
+homepage = "https://github.com/me-diru/anime-cli"
+repository = "https://github.com/me-diru/anime-cli"
+keywords = ["cli", "play", "anime"]
+categories = ["command-line-utilities"]
 
 [dependencies]
 reqwest = { version = "0.11.9", features = ["blocking"]}
