@@ -56,7 +56,7 @@ fn main() -> Result<()> {
                     }
                     if (ans.parse::<usize>().unwrap() < 1)
                         || (ans.parse::<usize>().unwrap()
-                            > usize::try_from(anime.episodes.len()).unwrap())
+                            > usize::try_from(anime.episodes[1]).unwrap())
                     {
                         Err(format!(
                             "Invalid option {}, Please choose an episode from the list",
